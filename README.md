@@ -53,13 +53,9 @@ sistema-agendamentos/
 
 ### 1. Clone o repositório
 
-```bash
-git clone https://github.com/seu-usuario/sistema-agendamentos.git
+git clone https://github.com/Pedro-Yuri/sistema-agendamentos.git
 cd sistema-agendamentos
 2. Instale as dependências
-bash
-Copiar
-Editar
 npm install
 3. Crie o arquivo .env com suas variáveis de ambiente:
 env
