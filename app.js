@@ -4,14 +4,20 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
+const Usuario = require('./modelos/User');
+const Agendamento = require('./modelos/Agendamento');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Conexão MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost/sistema-agendamentos')
-  .then(() => console.log('MongoDB conectado!'))
-  .catch(err => console.error('Erro ao conectar:', err));
+
+// Conexão MongoDB (escolha local ou .env)
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sistema-agendamentos', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('📦 Conectado ao MongoDB'))
+.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
 // Middleware
 app.use(express.static('public'));
@@ -21,22 +27,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-
-// Modelos
-const Usuario = mongoose.model('Usuario', new mongoose.Schema({
-  nome: String,
-  email: String,
-  senha: String,
-  role: { type: String, enum: ['cliente', 'atendente', 'admin'], default: 'cliente' }
-}));
-
-const Agendamento = mongoose.model('Agendamento', new mongoose.Schema({
-  clienteId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
-  data: Date,
-  descricao: String,
-  status: { type: String, default: 'Pendente' }
-}));
-
 // Rotas
 
 // Cadastro
