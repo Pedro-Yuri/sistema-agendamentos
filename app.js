@@ -101,6 +101,17 @@ app.patch('/agendamentos/:id/status', auth, async (req, res) => {
   res.json({ mensagem: 'Status atualizado' });
 });
 
+app.delete('/agendamento/:id', auth, async(req,res)=> {
+  const {id} = req.params;
+  const user = req.session.usuario;
+  if (user.role !== 'admin' && user.role !== 'atendente') {
+    return res.status(403).json({mensagem: 'Apenas admin ou atendemte pode deletar agendamestos'});
+  }
+  await Agendamento.findByIdAndDelete(id);
+  res.json({mensagem: 'Agendamento removido com sucesso'});
+});
+
+
 // Sair
 app.post('/logout', (req, res) => {
   req.session.destroy();
